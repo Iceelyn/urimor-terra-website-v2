@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#101013"/>
+      <stop offset="1" stop-color="#0a0a0c"/>
+    </linearGradient>
+    <radialGradient id="sun" cx="50%" cy="46%" r="50%">
+      <stop offset="0" stop-color="#f0a93b" stop-opacity=".38"/>
+      <stop offset="1" stop-color="#f0a93b" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#sun)"/>
+  <g transform="translate(880 315) scale(2.6)" fill="none">
+    <path d="M35 50a15 15 0 0 1 30 0Z" fill="#f0a93b" transform="translate(-50 -50)"/>
+    <path d="M22 50a28 28 0 0 1 56 0" stroke="#f0a93b" stroke-opacity=".5" stroke-width="2.4" transform="translate(-50 -50)"/>
+    <path d="M12 50a38 38 0 0 1 76 0" stroke="#f0a93b" stroke-opacity=".25" stroke-width="2.4" transform="translate(-50 -50)"/>
+    <path d="M88 50a38 38 0 0 1-76 0" stroke="#f3efe6" stroke-opacity=".5" stroke-width="2.4" transform="translate(-50 -50)"/>
+    <path d="M77 50a27 27 0 0 1-54 0" stroke="#f3efe6" stroke-opacity=".34" stroke-width="2.4" transform="translate(-50 -50)"/>
+    <path d="M66 50a16 16 0 0 1-32 0" stroke="#f3efe6" stroke-opacity=".2" stroke-width="2.4" transform="translate(-50 -50)"/>
+    <path d="M2 50h96" stroke="#f3efe6" stroke-opacity=".45" stroke-width="2" transform="translate(-50 -50)"/>
+  </g>
+  <text x="80" y="250" font-family="Archivo, Helvetica, Arial, sans-serif" font-size="34" font-weight="500" letter-spacing="8" fill="#f0a93b">URIMOR TERRA</text>
+  <text x="80" y="360" font-family="Archivo, Helvetica, Arial, sans-serif" font-size="76" font-weight="600" letter-spacing="-3" fill="#f3efe6">Where the mine ends,</text>
+  <text x="80" y="440" font-family="Georgia, 'Times New Roman', serif" font-style="italic" font-size="76" fill="#f0a93b">the grid begins.</text>
+  <text x="80" y="530" font-family="Archivo, Helvetica, Arial, sans-serif" font-size="24" fill="#f3efe6" fill-opacity=".6">Solar distribution &#183; Consulting &#183; Post-mining renewable energy &#183; Ulaanbaatar</text>
+  <rect x="80" y="560" width="1040" height="1" fill="#f3efe6" fill-opacity=".14"/>
+</svg>

@@ -1,0 +1,141 @@
+/* ============================================================
+   BASE / RESET
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: auto;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--f-body);
+  font-size: var(--t-base);
+  font-weight: 400;
+  line-height: 1.55;
+  letter-spacing: -0.005em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  text-rendering: optimizeLegibility;
+}
+
+body.is-locked { overflow: hidden; }
+
+/* Anchored sections must clear the fixed header, however they are reached:
+   an in-page link, a cross-page hash, or the browser's own restore. */
+[id] { scroll-margin-top: calc(var(--nav-h) + 1.5rem); }
+
+h1, h2, h3, h4, h5, p, figure, blockquote, dl, dd { margin: 0; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+img, svg, video, canvas { display: block; max-width: 100%; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+
+:focus-visible {
+  outline: 2px solid var(--solar);
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+
+::selection { background: var(--solar); color: #0a0a0c; }
+
+/* — Scrollbar ————————————————————————————— */
+@supports (scrollbar-color: red blue) {
+  html { scrollbar-color: var(--ash-2) var(--obsidian); scrollbar-width: thin; }
+}
+::-webkit-scrollbar { width: 9px; height: 9px; }
+::-webkit-scrollbar-track { background: var(--obsidian); }
+::-webkit-scrollbar-thumb { background: var(--ash-2); }
+::-webkit-scrollbar-thumb:hover { background: var(--terra); }
+
+/* — Typography primitives ————————————————— */
+.display {
+  font-family: var(--f-display);
+  font-weight: 600;
+  line-height: 0.92;
+  letter-spacing: -0.038em;
+  text-wrap: balance;
+}
+.display--tight { line-height: 0.86; letter-spacing: -0.045em; }
+
+.serif {
+  font-family: var(--f-serif);
+  font-weight: 400;
+  font-style: italic;
+  letter-spacing: -0.01em;
+}
+
+.mono {
+  font-family: var(--f-mono);
+  font-size: var(--t-mono);
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.lede {
+  font-size: var(--t-lg);
+  line-height: 1.42;
+  letter-spacing: -0.014em;
+  color: var(--ink-70);
+  text-wrap: pretty;
+}
+
+.u-accent { color: var(--solar); }
+.u-muted { color: var(--ink-45); }
+.u-nowrap { white-space: nowrap; }
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* — Layout primitives —————————————————————— */
+.shell {
+  width: 100%;
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.section { position: relative; padding-block: var(--sec-y); }
+.section--flush { padding-block: 0; }
+
+.grid12 {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: clamp(1rem, 0.4rem + 1.6vw, 2.2rem);
+}
+@media (max-width: 860px) {
+  .grid12 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+}
+
+.rule { height: 1px; background: var(--rule); width: 100%; transform-origin: left; }
+
+/* — Inverted (light) sections ——————————————— */
+.invert {
+  background: var(--bone);
+  color: var(--ink-dark);
+  --fg: var(--ink-dark);
+  --ink-70: var(--ink-dark-70);
+  --ink-45: var(--ink-dark-45);
+  --ink-25: var(--ink-dark-15);
+  --ink-12: var(--ink-dark-15);
+  --ink-06: var(--ink-dark-08);
+  --rule: var(--ink-dark-15);
+}
+.invert ::selection { background: var(--ink-dark); color: var(--bone); }
+
+/* — Reduced motion ————————————————————————— */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .marquee__track { animation: none !important; }
+}
