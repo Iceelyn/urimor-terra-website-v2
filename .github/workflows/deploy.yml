@@ -2,7 +2,11 @@ name: Deploy site to GitHub Pages
 
 on:
   push:
-    branches: [main]
+    # The repository's default branch is currently the claude/* working branch,
+    # so deploy from that as well as from main once one exists.
+    branches:
+      - main
+      - 'claude/**'
   workflow_dispatch:
 
 permissions:
