@@ -4,9 +4,10 @@ Corporate website for **Urimor Terra Development LLC**, a Mongolian climate-infr
 venture working in solar distribution, renewable energy and ESG consulting, small-scale
 solar installation, and post-mining renewable energy.
 
-The site's central idea — *where the mine ends, the grid begins* — is rendered literally in
-the hero: a WebGL particle field that holds the terraced bowl of a depleted open-pit mine
-and, as you scroll, reorganises into the ordered rows of a solar array.
+The site's central idea is rendered literally in the hero: a WebGL particle field that holds
+three states of the same piece of ground and moves between them as you scroll — the terraced
+bowl of a depleted open-pit mine, an installed solar array, and that array with the land
+restored and vegetation returned to the aisles between the rows.
 
 ---
 
@@ -37,16 +38,16 @@ so it also works from a subdirectory.
 
 | File | Purpose |
 |---|---|
-| `index.html` | Home — hero, the pit→array transformation, capabilities, Nalaikh proof point, timeline, team |
-| `capabilities.html` | The four revenue lines in depth, revenue model, stacked site revenue |
-| `thesis.html` | The market thesis: closure liabilities, siting crisis, climate finance, evidence, competitors |
-| `about.html` | Company, mission, journey, founders, partnerships, what we're looking for |
+| `index.html` | Home — hero and the three-state transformation, about, market context, services, project reference, track record, team |
+| `services.html` | The four service lines in depth |
+| `approach.html` | Market, drivers, project reference, research, project finance, closure software |
+| `about.html` | Company, mission, track record, team, partnerships, what we're looking for |
 
 ## Structure
 
 ```
-index.html, capabilities.html,     page markup (hand-editable, no templating step)
-thesis.html, about.html
+index.html, services.html,         page markup (hand-editable, no templating step)
+approach.html, about.html
 public/                            favicon.svg, og.svg, robots.txt — copied verbatim
 src/
   styles/
@@ -57,8 +58,8 @@ src/
   js/
     main.js                        entry: preloader, hero, boot
     modules/
-      terrain.js                   three.js particle field (pit ⇄ solar array)
-      motion.js                    line splitter, scroll reveals, counters, timeline
+      terrain.js                   three.js particle field (pit → array → restored land)
+      motion.js                    line splitter, scroll reveals, counters, track record
       ui.js                        nav, mobile menu, cursor, magnetic buttons, accordion
 ```
 
@@ -72,15 +73,21 @@ Core tokens live in `src/styles/tokens.css`:
 
 | Token | Value | Role |
 |---|---|---|
-| `--obsidian` | `#0a0a0c` | page ground |
-| `--bone` | `#f3efe6` | primary text, inverted sections |
-| `--solar` | `#f0a93b` | accent — the sun |
-| `--ember` | `#c9542a` | copper, mined earth |
-| `--flora` | `#7fa06a` | restoration |
-| `--steel` | `#7f97a7` | cold data |
+| `--midnight` | `#060b13` | page ground |
+| `--paper` | `#f0f4f8` | inverted sections |
+| `--ink` | `#eef4fa` | primary text |
+| `--pv` | `#3d8bfd` | primary accent — photovoltaic blue |
+| `--flora` | `#35c08a` | restoration green |
+| `--earth` | `#8a7259` | depleted ground, used by the WebGL field |
+| `--cyan` | `#63d5ea` | panel glint, notes |
 
-Changing `--solar` re-tints the entire site, including the WebGL field
-(`uSolar` in `src/js/modules/terrain.js` mirrors it).
+Blue carries the energy side of the business and green the restoration side; both
+appear in the hero field, in the track-record rail, and in the scroll indicator.
+`.invert` (light sections) substitutes darker values for `--pv` and `--flora` so small
+text on paper clears WCAG AA — see the bottom of `src/styles/base.css`.
+
+Changing `--pv` re-tints the site; the WebGL field mirrors these values as `uPanel`,
+`uFlora` and `uEarth` in `src/js/modules/terrain.js`.
 
 ## Behaviour notes
 
@@ -88,8 +95,8 @@ Changing `--solar` re-tints the entire site, including the WebGL field
   are gated behind `.js`. With JavaScript disabled every page renders fully and readably.
 - **No WebGL, no problem.** `terrain.js` probes for a context and returns `null` if there
   isn't one; the hero falls back to a CSS gradient (`.hero__canvas.is-fallback`).
-- **Reduced motion.** `prefers-reduced-motion: reduce` collapses transition durations,
-  stops the marquee, and freezes the particle field's idle drift.
+- **Reduced motion.** `prefers-reduced-motion: reduce` collapses transition durations and
+  freezes the particle field's idle drift.
 - **Performance.** three.js is a dynamic import, so it never blocks first paint. Particle
   count and device pixel ratio scale down on small screens; rendering pauses when the hero
   scrolls out of view or the tab is hidden.
@@ -107,9 +114,15 @@ Every mention of the Nalaikh 50 MW feasibility study carries the disclaimer that
 reference case and that Urimor Terra holds no ownership stake in or contractual
 relationship to that project. Please keep that disclaimer attached if the copy is edited.
 
-## Adding founder photographs
+## People
 
-`.person__portrait` currently renders initials over the brand glyph. To use photographs,
-replace the `<span class="person__initials">` and `<svg class="person__glyph">` inside each
-`.person__portrait` with an `<img>`; the container already handles the aspect ratio and
-cropping.
+Founders and extended team share one fixed headshot size (`--headshot` in
+`src/styles/layout.css`), so the section reads as a single group. `.headshot` currently
+renders initials over the brand glyph. To use photographs, replace the
+`<svg class="headshot__glyph">` and `<span class="headshot__initials">` inside a
+`.headshot` with an `<img>` — the container already handles the square crop via
+`object-fit: cover`.
+
+**The five extended team members are placeholders.** Their names, titles and institutions
+are lorem ipsum, pending the real details. Search for `Lorem Ipsum` in `index.html` and
+`about.html` to find them.

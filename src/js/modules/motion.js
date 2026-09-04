@@ -191,45 +191,35 @@ export function initProgress() {
   });
 }
 
-/* ——— Horizontal timeline ————————————————————— */
-export function initTimeline() {
-  const wrap = document.querySelector('[data-timeline]');
-  if (!wrap) return;
-  const track = wrap.querySelector('.timeline__track');
-  const items = [...track.children];
-  if (!track || items.length < 2) return;
+/* ——— Track record ————————————————————————————
+   A vertical, chronological list. The rail fills as you read down it
+   and each year lights up when it is reached. */
+export function initTrack() {
+  const track = document.querySelector('[data-track]');
+  if (!track) return;
+  const fill = track.querySelector('[data-track-fill]');
+  const items = [...track.querySelectorAll('.track__item')];
 
-  const mm = gsap.matchMedia();
-
-  mm.add('(min-width: 861px)', () => {
-    const distance = () => Math.max(0, track.scrollWidth - wrap.clientWidth);
-    const tween = gsap.to(track, {
-      x: () => -distance(),
+  if (fill) {
+    gsap.to(fill, {
+      scaleY: 1,
       ease: 'none',
       scrollTrigger: {
-        trigger: wrap,
-        start: 'top top+=88',
-        end: () => '+=' + (distance() + window.innerHeight * 0.5),
-        pin: true,
-        scrub: 0.6,
-        invalidateOnRefresh: true,
-        anticipatePin: 1,
+        trigger: track,
+        start: 'top 62%',
+        end: 'bottom 78%',
+        scrub: 0.4,
       },
     });
-    items.forEach((item) => {
-      ScrollTrigger.create({
-        trigger: item,
-        containerAnimation: tween,
-        start: 'left center',
-        end: 'right center',
-        onToggle: (self) => item.classList.toggle('is-active', self.isActive),
-      });
-    });
-    return () => { items.forEach((i) => i.classList.remove('is-active')); };
-  });
+  }
 
-  mm.add('(max-width: 860px)', () => {
-    items.forEach((i) => i.classList.add('is-active'));
+  items.forEach((item) => {
+    ScrollTrigger.create({
+      trigger: item,
+      start: 'top 72%',
+      onEnter: () => item.classList.add('is-reached'),
+      onLeaveBack: () => item.classList.remove('is-reached'),
+    });
   });
 }
 

@@ -90,10 +90,10 @@ export function initCursor() {
 
   const hot = 'a, button, [data-hover], input, textarea, summary';
   document.addEventListener('pointerover', (e) => {
-    if (e.target.closest(hot)) gsap.to(ring, { scale: 1.85, borderColor: 'rgba(240,169,59,.7)', duration: 0.4, ease: 'power3' });
+    if (e.target.closest(hot)) gsap.to(ring, { scale: 1.85, borderColor: 'rgba(61,139,253,.7)', duration: 0.4, ease: 'power3' });
   });
   document.addEventListener('pointerout', (e) => {
-    if (e.target.closest(hot)) gsap.to(ring, { scale: 1, borderColor: 'rgba(243,239,230,.25)', duration: 0.4, ease: 'power3' });
+    if (e.target.closest(hot)) gsap.to(ring, { scale: 1, borderColor: 'rgba(238,244,250,.25)', duration: 0.4, ease: 'power3' });
   });
 }
 

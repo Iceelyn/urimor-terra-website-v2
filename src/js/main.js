@@ -10,7 +10,7 @@ import '@fontsource/instrument-serif/400-italic.css';
 import '@fontsource-variable/jetbrains-mono/wght.css';
 
 import '../styles/main.css';
-import { gsap, ScrollTrigger, reduced, splitLines, initReveals, initCounters, initParallax, initProgress, initTimeline } from './modules/motion.js';
+import { gsap, ScrollTrigger, reduced, splitLines, initReveals, initCounters, initParallax, initProgress, initTrack } from './modules/motion.js';
 import { initNav, initMenu, initCursor, initMagnetic, initAccordion, initYear } from './modules/ui.js';
 
 document.documentElement.classList.remove('no-js');
@@ -71,10 +71,11 @@ async function initHero() {
     }
   }
 
-  // One scrub across the whole stage drives the pit → array morph.
+  // One scrub across the whole stage drives both transitions: the array is
+  // built first, then the land recovers around it.
   const phaseBar = hero.querySelector('[data-phase-bar]');
   const phaseLabel = hero.querySelector('[data-phase-label]');
-  const LABELS = ['Depleted pit', 'In transition', 'Solar asset'];
+  const LABELS = ['Depleted site', 'Solar array installed', 'Land restored'];
 
   if (stage) {
     ScrollTrigger.create({
@@ -83,12 +84,17 @@ async function initHero() {
       end: 'bottom bottom',
       scrub: true,
       onUpdate: (self) => {
-        // Hold the pit through the opening screen, then transform.
-        const p = gsap.utils.clamp(0, 1, (self.progress - 0.14) / 0.56);
-        field?.setProgress(p);
-        if (phaseBar) phaseBar.style.width = (p * 100).toFixed(1) + '%';
+        const t = self.progress;
+        // Hold the pit through the opening screen, build, hold, then restore.
+        const build = gsap.utils.clamp(0, 1, (t - 0.15) / 0.32);
+        const restore = gsap.utils.clamp(0, 1, (t - 0.58) / 0.30);
+        field?.setBuild(build);
+        field?.setRestore(restore);
+
+        const overall = (build + restore) / 2;
+        if (phaseBar) phaseBar.style.width = (overall * 100).toFixed(1) + '%';
         if (phaseLabel) {
-          const idx = p < 0.06 ? 0 : p < 0.94 ? 1 : 2;
+          const idx = restore > 0.5 ? 2 : build > 0.5 ? 1 : 0;
           if (phaseLabel.dataset.idx !== String(idx)) {
             phaseLabel.dataset.idx = String(idx);
             gsap.fromTo(
@@ -201,7 +207,7 @@ function boot() {
   initCounters();
   initParallax();
   initProgress();
-  initTimeline();
+  initTrack();
 
   // Re-measure once webfonts land so split lines sit correctly.
   if (document.fonts?.ready) {

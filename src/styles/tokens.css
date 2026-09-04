@@ -6,44 +6,44 @@
 
 :root {
   /* — Ground —————————————————————————————— */
-  --obsidian: #0a0a0c;
-  --basalt: #101013;
-  --stone: #17171c;
-  --ash: #23232a;
-  --ash-2: #33333d;
+  --midnight: #060b13;
+  --deep: #0a1220;
+  --slate: #101c2e;
+  --slate-2: #1a2b42;
 
   /* — Light ground (inverted sections) ——————— */
-  --bone: #f3efe6;
-  --bone-2: #e7e0d2;
-  --bone-3: #d6cdbb;
+  --paper: #f0f4f8;
+  --paper-2: #e2e9f0;
+  --paper-3: #cdd8e4;
 
   /* — Ink —————————————————————————————————— */
-  --ink: #f3efe6;
-  --ink-70: rgba(243, 239, 230, 0.70);
-  --ink-45: rgba(243, 239, 230, 0.45);
-  --ink-25: rgba(243, 239, 230, 0.25);
-  --ink-12: rgba(243, 239, 230, 0.12);
-  --ink-06: rgba(243, 239, 230, 0.06);
+  --ink: #eef4fa;
+  --ink-70: rgba(238, 244, 250, 0.70);
+  --ink-45: rgba(238, 244, 250, 0.58);
+  --ink-25: rgba(238, 244, 250, 0.25);
+  --ink-12: rgba(238, 244, 250, 0.13);
+  --ink-06: rgba(238, 244, 250, 0.06);
 
-  --ink-dark: #0f0f12;
-  --ink-dark-70: rgba(15, 15, 18, 0.70);
-  --ink-dark-45: rgba(15, 15, 18, 0.48);
-  --ink-dark-15: rgba(15, 15, 18, 0.15);
-  --ink-dark-08: rgba(15, 15, 18, 0.09);
+  --ink-dark: #0a1220;
+  --ink-dark-70: rgba(10, 18, 32, 0.72);
+  --ink-dark-45: rgba(10, 18, 32, 0.62);
+  --ink-dark-15: rgba(10, 18, 32, 0.15);
+  --ink-dark-08: rgba(10, 18, 32, 0.09);
 
   /* — Signal ——————————————————————————————— */
-  --solar: #f0a93b;      /* primary accent — the sun */
-  --solar-soft: #f7c877;
-  --ember: #c9542a;      /* copper — mined earth, heat */
-  --terra: #8c5a34;      /* soil */
-  --flora: #7fa06a;      /* restoration */
-  --steel: #7f97a7;      /* data, cold sky */
+  --pv: #3d8bfd;         /* primary accent — photovoltaic blue */
+  --pv-soft: #7fb2ff;
+  --pv-deep: #1e56b8;
+  --flora: #35c08a;      /* restoration green */
+  --flora-soft: #6fdcae;
+  --earth: #9a7551;      /* depleted ground */
+  --cyan: #63d5ea;       /* panel glint */
 
   /* — Semantic ————————————————————————————— */
-  --bg: var(--obsidian);
+  --bg: var(--midnight);
   --fg: var(--ink);
   --rule: var(--ink-12);
-  --accent: var(--solar);
+  --accent: var(--pv);
 
   /* — Type ————————————————————————————————— */
   --f-display: 'Archivo Variable', 'Archivo', 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -59,8 +59,8 @@
   --t-lg: clamp(1.15rem, 1.04rem + 0.5vw, 1.5rem);
   --t-xl: clamp(1.5rem, 1.25rem + 1.1vw, 2.35rem);
   --t-2xl: clamp(2rem, 1.5rem + 2.2vw, 3.6rem);
-  --t-3xl: clamp(2.6rem, 1.6rem + 4.4vw, 6rem);
-  --t-4xl: clamp(3.2rem, 1.4rem + 8vw, 9.5rem);
+  --t-3xl: clamp(2.3rem, 1.5rem + 3.4vw, 4.2rem);
+  --t-4xl: clamp(2.6rem, 1.6rem + 5vw, 5rem);
   --t-5xl: clamp(4rem, 0.6rem + 14vw, 15rem);
 
   /* — Space ———————————————————————————————— */
