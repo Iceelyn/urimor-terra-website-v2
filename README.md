@@ -38,10 +38,10 @@ so it also works from a subdirectory.
 
 | File | Purpose |
 |---|---|
-| `index.html` | Home — hero and the three-state transformation, about, market context, services, project reference, track record, team |
-| `services.html` | The four service lines in depth |
-| `approach.html` | Market, drivers, project reference, research, project finance, closure software |
-| `about.html` | Company, mission, track record, team, partnerships, what we're looking for |
+| `index.html` | Home — hero, four services, mine land, why work with us, track record, team |
+| `services.html` | The four services in detail |
+| `approach.html` | Why closed mine land, restoration, Nalaikh, software |
+| `about.html` | About us, mission and vision, track record, team |
 
 ## Structure
 
@@ -116,13 +116,21 @@ relationship to that project. Please keep that disclaimer attached if the copy i
 
 ## People
 
-Founders and extended team share one fixed headshot size (`--headshot` in
-`src/styles/layout.css`), so the section reads as a single group. `.headshot` currently
-renders initials over the brand glyph. To use photographs, replace the
-`<svg class="headshot__glyph">` and `<span class="headshot__initials">` inside a
-`.headshot` with an `<img>` — the container already handles the square crop via
-`object-fit: cover`.
+Team cards live in the `FOUNDERS` and `ADVISORS` lists at the top of the people block.
+Each person takes six fields:
 
-**The five extended team members are placeholders.** Their names, titles and institutions
-are lorem ipsum, pending the real details. Search for `Lorem Ipsum` in `index.html` and
-`about.html` to find them.
+```
+initials  two letters, shown until a photograph is supplied
+photo     path to a headshot, e.g. "images/naranzaya.jpg" — leave "" for the placeholder
+linkedin  profile URL — leave "" and the LinkedIn badge is not rendered
+name      full name
+role      Co-founder, Advisory Board, and so on
+line      one short line under the role
+bio       the text behind the Read Bio toggle
+```
+
+`ADVISORS` is empty. Add entries there and an "Advisory board" row appears below the
+founders automatically, in the same card style. Nothing else needs changing.
+
+Photographs are square (`aspect-ratio: 1/1`, `object-fit: cover`), so any reasonably
+centred headshot will crop correctly.

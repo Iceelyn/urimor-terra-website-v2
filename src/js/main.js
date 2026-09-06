@@ -11,7 +11,7 @@ import '@fontsource-variable/jetbrains-mono/wght.css';
 
 import '../styles/main.css';
 import { gsap, ScrollTrigger, reduced, splitLines, initReveals, initCounters, initParallax, initProgress, initTrack } from './modules/motion.js';
-import { initNav, initMenu, initCursor, initMagnetic, initAccordion, initYear } from './modules/ui.js';
+import { initNav, initMenu, initCursor, initMagnetic, initAccordion, initBios, initYear } from './modules/ui.js';
 
 document.documentElement.classList.remove('no-js');
 document.documentElement.classList.add('js');
@@ -75,7 +75,7 @@ async function initHero() {
   // built first, then the land recovers around it.
   const phaseBar = hero.querySelector('[data-phase-bar]');
   const phaseLabel = hero.querySelector('[data-phase-label]');
-  const LABELS = ['Depleted site', 'Solar array installed', 'Land restored'];
+  const LABELS = ['Closed mine', 'Solar installed', 'Land restored'];
 
   if (stage) {
     ScrollTrigger.create({
@@ -200,6 +200,7 @@ function boot() {
   initCursor();
   initMagnetic();
   initAccordion();
+  initBios();
   initLedger();
   initAnchors();
   initYear();

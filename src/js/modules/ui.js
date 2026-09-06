@@ -149,6 +149,21 @@ export function initAccordion() {
   });
 }
 
+/* ——— Team bio toggles ————————————————————————— */
+export function initBios() {
+  document.querySelectorAll('[data-bio-toggle]').forEach((btn) => {
+    const panel = document.getElementById(btn.getAttribute('aria-controls'));
+    if (!panel) return;
+    const label = btn.querySelector('span');
+    btn.addEventListener('click', () => {
+      const open = btn.getAttribute('aria-expanded') !== 'true';
+      btn.setAttribute('aria-expanded', String(open));
+      if (label) label.textContent = open ? 'Hide Bio' : 'Read Bio';
+      gsap.to(panel, { height: open ? 'auto' : 0, duration: 0.5, ease: 'expo.out' });
+    });
+  });
+}
+
 /* ——— Footer year ————————————————————————————— */
 export function initYear() {
   document.querySelectorAll('[data-year]').forEach((el) => {
