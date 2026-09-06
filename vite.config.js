@@ -14,6 +14,7 @@ export default defineConfig({
         main: resolve(import.meta.dirname, 'index.html'),
         services: resolve(import.meta.dirname, 'services.html'),
         approach: resolve(import.meta.dirname, 'approach.html'),
+        news: resolve(import.meta.dirname, 'news.html'),
         about: resolve(import.meta.dirname, 'about.html'),
       },
     },

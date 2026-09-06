@@ -41,13 +41,15 @@ so it also works from a subdirectory.
 | `index.html` | Home — hero, three services, mine-to-solar venture, mine land, why work with us, track record, team |
 | `services.html` | The four services in detail |
 | `approach.html` | Why closed mine land, restoration, Nalaikh, software |
+| `news.html` | Conference notes and updates, newest first |
 | `about.html` | About us, mission and vision, track record, team |
 
 ## Structure
 
 ```
 index.html, services.html,         page markup (hand-editable, no templating step)
-approach.html, about.html
+approach.html, news.html,
+about.html
 public/                            favicon.svg, og.svg, robots.txt — copied verbatim
 src/
   styles/
@@ -58,7 +60,8 @@ src/
   js/
     main.js                        entry: preloader, hero, boot
     modules/
-      terrain.js                   three.js particle field (pit → array → restored land)
+      terrain.js                   three.js scene: particle field plus the wireframe
+                                   array (pit → array → restored land)
       motion.js                    line splitter, scroll reveals, counters, track record
       ui.js                        nav, mobile menu, cursor, magnetic buttons, accordion
 ```
@@ -136,3 +139,25 @@ to remove its card. The grid reflows on its own.
 
 Photographs are square (`aspect-ratio: 1/1`, `object-fit: cover`), so any reasonably
 centred headshot will crop correctly.
+
+## The opening sequence
+
+The hero canvas holds three states and scroll moves between them, with a numbered
+pager top-centre showing which one you are on. The array in states 02 and 03 is drawn
+line work — module frames, cell mullions, mounting legs, and a translucent glass face
+per module — not particles. `buildPanels()` in `src/js/modules/terrain.js` generates it,
+and `PANEL_VERT` / `FACE_VERT` fade it in as `uBuild` rises, staggered outward from the
+centre of the field.
+
+Timing lives in two places. Step height is `.tstep { min-height }` in
+`src/styles/layout.css`, and the point at which each state completes is the `build` and
+`restore` mapping in `initHero()` in `src/js/main.js`. If you change one, re-check the
+other: `build` should finish as caption 02 reaches centre screen, and `restore` as
+caption 03 does.
+
+## Adding a news post
+
+Posts live in the `POSTS` list in the news generator, newest first. Each takes an
+`anchor`, `date`, `kind`, `title`, `author`, `role`, `standfirst`, and a `body` of
+`(subheading, [paragraphs])` pairs. The homepage teaser under `#latest` is written by
+hand in the home page markup, so update it when a newer post should lead.

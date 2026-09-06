@@ -77,6 +77,16 @@ async function initHero() {
   const phaseLabel = hero.querySelector('[data-phase-label]');
   const LABELS = ['Closed mine', 'Solar installed', 'Land restored'];
 
+  const pager = document.querySelector('[data-seq-pager]');
+  const pagerItems = pager ? [...pager.querySelectorAll('.seqpager__item')] : [];
+  if (pager) {
+    gsap.to(pager, {
+      opacity: 1,
+      ease: 'none',
+      scrollTrigger: { trigger: stage, start: 'top top-=40', end: 'top top-=200', scrub: true },
+    });
+  }
+
   if (stage) {
     ScrollTrigger.create({
       trigger: stage,
@@ -86,8 +96,8 @@ async function initHero() {
       onUpdate: (self) => {
         const t = self.progress;
         // Hold the pit through the opening screen, build, hold, then restore.
-        const build = gsap.utils.clamp(0, 1, (t - 0.15) / 0.32);
-        const restore = gsap.utils.clamp(0, 1, (t - 0.58) / 0.30);
+        const build = gsap.utils.clamp(0, 1, (t - 0.20) / 0.36);
+        const restore = gsap.utils.clamp(0, 1, (t - 0.66) / 0.24);
         field?.setBuild(build);
         field?.setRestore(restore);
 
@@ -109,23 +119,27 @@ async function initHero() {
   }
 
   // Transformation captions fade through as each takes the screen.
-  document.querySelectorAll('[data-tstep]').forEach((step) => {
+  document.querySelectorAll('[data-tstep]').forEach((step, i) => {
     const inner = step.querySelector('.tstep__inner');
     const lines = splitLines(step.querySelector('.tstep__title'));
     gsap.set(inner, { autoAlpha: 0, y: 40 });
     if (lines.length) gsap.set(lines, { yPercent: 108 });
 
+    const setPager = () => pagerItems.forEach((el, n) => el.classList.toggle('is-active', n === i));
+    const show = (dur) => {
+      setPager();
+      gsap.to(inner, { autoAlpha: 1, y: 0, duration: dur, ease: 'expo.out' });
+      if (lines.length) gsap.to(lines, { yPercent: 0, duration: 1, ease: 'expo.out', stagger: 0.06 });
+    };
+
     ScrollTrigger.create({
       trigger: step,
-      start: 'top 72%',
-      end: 'bottom 28%',
-      onEnter: () => {
-        gsap.to(inner, { autoAlpha: 1, y: 0, duration: 0.9, ease: 'expo.out' });
-        if (lines.length) gsap.to(lines, { yPercent: 0, duration: 1, ease: 'expo.out', stagger: 0.06 });
-      },
-      onLeave: () => gsap.to(inner, { autoAlpha: 0, y: -30, duration: 0.6, ease: 'power2.in' }),
-      onEnterBack: () => gsap.to(inner, { autoAlpha: 1, y: 0, duration: 0.7, ease: 'expo.out' }),
-      onLeaveBack: () => gsap.to(inner, { autoAlpha: 0, y: 40, duration: 0.6, ease: 'power2.in' }),
+      start: 'top 68%',
+      end: 'bottom 32%',
+      onEnter: () => show(0.8),
+      onLeave: () => gsap.to(inner, { autoAlpha: 0, y: -26, duration: 0.5, ease: 'power2.in' }),
+      onEnterBack: () => show(0.6),
+      onLeaveBack: () => gsap.to(inner, { autoAlpha: 0, y: 34, duration: 0.5, ease: 'power2.in' }),
     });
   });
 

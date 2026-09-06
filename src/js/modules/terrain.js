@@ -121,8 +121,65 @@ const FRAG = /* glsl */ `
 
     float alpha = mask * mix(0.5, 0.86, vBuild) * (1.0 - 0.4 * sin(vBuild * 3.141592));
     alpha *= mix(1.0, 0.5 + 0.6 * smoothstep(-1.0, 0.6, vAcross), vBuild * (1.0 - vGrass));
+    // Once the array is drawn, the panel-role dust recedes behind the line work.
+    alpha *= mix(1.0, 0.2, vBuild * (1.0 - vGrass));
     alpha = mix(alpha, mask * 0.62, vGrass);
     gl_FragColor = vec4(col, alpha);
+  }
+`;
+
+const PANEL_VERT = /* glsl */ `
+  uniform float uBuild;
+  attribute float aDelay;
+  attribute float aKind;      // 0 = module, 1 = mounting structure
+  varying float vAlpha;
+  varying float vKind;
+
+  void main() {
+    // Rows draw themselves in from the middle of the array outwards, the way
+    // a technical drawing is built up line by line.
+    float p = clamp((uBuild - aDelay * 0.34) / 0.42, 0.0, 1.0);
+    vAlpha = p * p * (3.0 - 2.0 * p);
+    vKind = aKind;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  }
+`;
+
+const PANEL_FRAG = /* glsl */ `
+  precision mediump float;
+  uniform vec3 uModule;
+  uniform vec3 uMount;
+  varying float vAlpha;
+  varying float vKind;
+  void main() {
+    vec3 c = mix(uModule, uMount, vKind);
+    gl_FragColor = vec4(c, vAlpha * mix(1.0, 0.55, vKind));
+  }
+`;
+
+const FACE_VERT = /* glsl */ `
+  uniform float uBuild;
+  attribute float aDelay;
+  attribute float aSlope;     // 0 at the low edge, 1 at the raised edge
+  varying float vAlpha;
+  varying float vSlope;
+  void main() {
+    float p = clamp((uBuild - aDelay * 0.34) / 0.42, 0.0, 1.0);
+    vAlpha = p * p * (3.0 - 2.0 * p);
+    vSlope = aSlope;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  }
+`;
+
+const FACE_FRAG = /* glsl */ `
+  precision mediump float;
+  uniform vec3 uGlass;
+  varying float vAlpha;
+  varying float vSlope;
+  void main() {
+    // brighter toward the raised edge, the way glass catches the sky
+    float sheen = 0.35 + 0.65 * vSlope;
+    gl_FragColor = vec4(uGlass * sheen, vAlpha * 0.17 * sheen);
   }
 `;
 
@@ -217,6 +274,86 @@ function buildAttributes(count, R) {
   return { pit, farm, land, rand, meta };
 }
 
+/* The array drawn as line work rather than dust: module frames, cell
+   mullions and mounting legs, so state 02 reads unmistakably as photovoltaic
+   panels and not as a band of particles. */
+function buildPanels(R) {
+  const ROWS = 11;
+  const ROW_GAP = (R * 1.92) / ROWS;
+  const TILT = 0.68;                       // panel pitch, radians
+  const PW = 2.3;                          // module width across the row
+  const PD = ROW_GAP * 0.74;               // module depth up the slope
+  const BASE = 0.36;                       // height of the module centre
+  const GAP = PW * 1.13;                   // spacing between modules
+
+  const dy = (PD / 2) * Math.sin(TILT);
+  const dz = (PD / 2) * Math.cos(TILT);
+  const pos = [];
+  const delay = [];
+  const kind = [];
+  const fpos = [];
+  const fdelay = [];
+  const fslope = [];
+
+  const seg = (ax, ay, az, bx, by, bz, d, k) => {
+    pos.push(ax, ay, az, bx, by, bz);
+    delay.push(d, d);
+    kind.push(k, k);
+  };
+
+  for (let row = 0; row < ROWS; row++) {
+    const edge = (row / (ROWS - 1)) * 2 - 1;
+    const span = R * 1.04 * Math.sqrt(Math.max(0.22, 1 - edge * edge * 0.62));
+    const rowZ = -R * 0.96 + row * ROW_GAP;
+    const count = Math.max(2, Math.floor((span * 2) / GAP));
+    const start = -((count - 1) * GAP) / 2;
+
+    for (let i = 0; i < count; i++) {
+      const xc = start + i * GAP;
+      const xL = xc - PW / 2;
+      const xR = xc + PW / 2;
+      const loY = BASE - dy, loZ = rowZ + dz;
+      const hiY = BASE + dy, hiZ = rowZ - dz;
+      // draw order runs outward from the centre of the field
+      const d = Math.min(1, Math.hypot(xc / (R * 1.1), (rowZ + R * 0.5) / R));
+
+      // module frame
+      seg(xL, loY, loZ, xR, loY, loZ, d, 0);
+      seg(xR, loY, loZ, xR, hiY, hiZ, d, 0);
+      seg(xR, hiY, hiZ, xL, hiY, hiZ, d, 0);
+      seg(xL, hiY, hiZ, xL, loY, loZ, d, 0);
+      // glass face, two triangles, so the module reads as a surface
+      const quad = [
+        [xL, loY, loZ, 0], [xR, loY, loZ, 0], [xR, hiY, hiZ, 1],
+        [xL, loY, loZ, 0], [xR, hiY, hiZ, 1], [xL, hiY, hiZ, 1],
+      ];
+      quad.forEach((v) => { fpos.push(v[0], v[1], v[2]); fslope.push(v[3]); fdelay.push(d); });
+
+      // one cross of mullions — enough to read as a module, not a mesh
+      seg(xc, loY, loZ, xc, hiY, hiZ, d, 0);
+      seg(xL, (loY + hiY) / 2, (loZ + hiZ) / 2, xR, (loY + hiY) / 2, (loZ + hiZ) / 2, d, 0);
+      // mounting legs down to the ground
+      seg(xc - PW / 3, loY, loZ, xc - PW / 3, 0, loZ, d, 1);
+      seg(xc + PW / 3, hiY, hiZ, xc + PW / 3, 0, hiZ, d, 1);
+      seg(xc - PW / 3, 0, loZ, xc + PW / 3, 0, hiZ, d, 1);
+    }
+  }
+
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  geo.setAttribute('aDelay', new THREE.Float32BufferAttribute(delay, 1));
+  geo.setAttribute('aKind', new THREE.Float32BufferAttribute(kind, 1));
+  geo.boundingSphere = new THREE.Sphere(new THREE.Vector3(0, 0, 0), R * 2.2);
+
+  const faces = new THREE.BufferGeometry();
+  faces.setAttribute('position', new THREE.Float32BufferAttribute(fpos, 3));
+  faces.setAttribute('aDelay', new THREE.Float32BufferAttribute(fdelay, 1));
+  faces.setAttribute('aSlope', new THREE.Float32BufferAttribute(fslope, 1));
+  faces.boundingSphere = new THREE.Sphere(new THREE.Vector3(0, 0, 0), R * 2.2);
+
+  return { lines: geo, faces };
+}
+
 export function initTerrain(container, opts = {}) {
   if (!container) return null;
 
@@ -242,8 +379,8 @@ export function initTerrain(container, opts = {}) {
   const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
   // Landscape frames the field low, under the headline. Portrait needs it
   // higher and closer so the field is not cropped by the copy below.
-  const LAND_VIEW = { pos: new THREE.Vector3(0, 5.6, 17.4), look: -1.35, rise: 5.2, pull: 2.4, glow: 1 };
-  const PORT_VIEW = { pos: new THREE.Vector3(0, 6.2, 15.2), look: -0.35, rise: 3.4, pull: 0.6, glow: 0.62 };
+  const LAND_VIEW = { pos: new THREE.Vector3(0, 5.6, 17.4), look: -1.35, rise: 3.1, pull: 2.4, glow: 1 };
+  const PORT_VIEW = { pos: new THREE.Vector3(0, 6.2, 15.2), look: -0.35, rise: 2.2, pull: 0.6, glow: 0.62 };
   let view = LAND_VIEW;
   const camBase = LAND_VIEW.pos.clone();
   camera.position.copy(camBase);
@@ -316,7 +453,44 @@ export function initTerrain(container, opts = {}) {
       blending: THREE.AdditiveBlending,
     })
   );
-  scene.add(points);
+
+  /* — the array, drawn — */
+  const panelUniforms = {
+    uBuild: { value: 0 },
+    uModule: { value: hex(0x5aa0ff) },
+    uMount: { value: hex(0xcfe0f2) },
+  };
+  const panelGeo = buildPanels(R);
+  const glass = new THREE.Mesh(
+    panelGeo.faces,
+    new THREE.ShaderMaterial({
+      vertexShader: FACE_VERT,
+      fragmentShader: FACE_FRAG,
+      uniforms: { uBuild: panelUniforms.uBuild, uGlass: { value: hex(0x4d93ff) } },
+      transparent: true,
+      depthWrite: false,
+      side: THREE.DoubleSide,
+      blending: THREE.AdditiveBlending,
+    })
+  );
+  const panels = new THREE.LineSegments(
+    panelGeo.lines,
+    new THREE.ShaderMaterial({
+      vertexShader: PANEL_VERT,
+      fragmentShader: PANEL_FRAG,
+      uniforms: panelUniforms,
+      transparent: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+    })
+  );
+
+  // One group so the line work and the particles share every transform.
+  const field = new THREE.Group();
+  field.add(points);
+  field.add(glass);
+  field.add(panels);
+  scene.add(field);
 
   /* — sizing — */
   const dprCap = small ? 1.6 : 1.9;
@@ -372,6 +546,7 @@ export function initTerrain(container, opts = {}) {
     uniforms.uTime.value += reduced ? 0 : dt;
     uniforms.uBuild.value += (state.build - uniforms.uBuild.value) * 0.075;
     uniforms.uRestore.value += (state.restore - uniforms.uRestore.value) * 0.075;
+    panelUniforms.uBuild.value = uniforms.uBuild.value;
 
     const b = uniforms.uBuild.value;
     const g = uniforms.uRestore.value;
@@ -392,7 +567,10 @@ export function initTerrain(container, opts = {}) {
     camera.position.lerp(tmp, 0.08);
     camera.lookAt(0, view.look + b * 1.55 + g * 0.12, 0);
 
-    points.rotation.y = Math.sin(uniforms.uTime.value * 0.045) * 0.06 + b * 0.1;
+    field.rotation.y = Math.sin(uniforms.uTime.value * 0.045) * 0.06 + b * 0.1;
+    // Slide the array off-centre while the second caption is on screen, then
+    // bring it back for the third, so the copy never fights the drawing.
+    field.position.x = -1.7 * b * (1.0 - g);
 
     renderer.render(scene, camera);
   }
@@ -412,6 +590,10 @@ export function initTerrain(container, opts = {}) {
       document.removeEventListener('visibilitychange', onVis);
       geo.dispose();
       points.material.dispose();
+      panelGeo.lines.dispose();
+      panelGeo.faces.dispose();
+      panels.material.dispose();
+      glass.material.dispose();
       glow.geometry.dispose();
       glow.material.dispose();
       renderer.dispose();

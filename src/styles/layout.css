@@ -28,10 +28,11 @@ main > .section--proof { background: linear-gradient(180deg, var(--midnight), va
 main > .foot, .foot { position: relative; z-index: 1; background: var(--bg); }
 
 /* ——— Scroll sequence ————————————————————————— */
-.sequence { position: relative; overflow-x: clip; }
+/* Tail keeps the canvas pinned long enough for the last caption to settle. */
+.sequence { position: relative; overflow-x: clip; padding-bottom: 40svh; }
 .tstep {
-  min-height: 92svh; display: flex; align-items: center;
-  padding-block: clamp(2rem, 6vh, 5rem);
+  min-height: 58svh; display: flex; align-items: center;
+  padding-block: clamp(1.4rem, 3vh, 2.6rem);
 }
 .tstep__row { display: flex; }
 .tstep__inner {
@@ -55,9 +56,26 @@ main > .foot, .foot { position: relative; z-index: 1; background: var(--bg); }
 .tstep:nth-child(3) .tstep__row { justify-content: center; }
 @media (max-width: 900px) {
   .tstep__row, .tstep:nth-child(2) .tstep__row, .tstep:nth-child(3) .tstep__row { justify-content: flex-start; }
-  .tstep { min-height: 82svh; }
+  .tstep { min-height: 56svh; }
   .tstep__inner::before { inset: -1.3rem -1.1rem; }
 }
+
+/* ——— Sequence pager ——————————————————————————
+   Position marker for the three states, top centre of the stage. */
+.seqpager {
+  position: absolute; z-index: 4; left: 50%; transform: translateX(-50%);
+  top: calc(var(--nav-h) + clamp(0.8rem, 2.4vh, 1.8rem));
+  display: flex; align-items: center; gap: 0.7rem;
+  opacity: 0; pointer-events: none;
+}
+.seqpager__item {
+  font-family: var(--f-mono); font-size: var(--t-mono); font-weight: 500;
+  letter-spacing: 0.18em; color: var(--ink-45);
+  transition: color 0.45s var(--e-out);
+}
+.seqpager__item.is-active { color: var(--pv); }
+.seqpager__rule { width: 26px; height: 1px; background: var(--ink-12); }
+@media (max-width: 620px) { .seqpager { gap: 0.5rem; } .seqpager__rule { width: 16px; } }
 
 /* ——— Hero composition ————————————————————————— */
 .hero { z-index: 1; }
@@ -349,3 +367,37 @@ main > .foot, .foot { position: relative; z-index: 1; background: var(--bg); }
 .venture .card__title { font-size: var(--t-xl); margin-top: 0.3rem; }
 .venture .card__body { max-width: 56ch; }
 .venture .card__foot { display: flex; }
+
+/* ——— News ————————————————————————————————————
+   One article per block, meta in the left rail. */
+.post { padding-block: clamp(3rem, 6vw, 6rem); }
+.post + .post { border-top: 1px solid var(--rule); }
+.post__date { color: var(--pv); }
+.post__by { margin-top: clamp(1.6rem, 3vw, 2.4rem); padding-top: 1rem; border-top: 1px solid var(--rule); }
+.post__byname { font-size: var(--t-sm); font-weight: 500; }
+.post__title { font-size: var(--t-2xl); max-width: 20ch; }
+.post__standfirst { margin-top: clamp(1.2rem, 2.4vw, 1.8rem); max-width: 56ch; }
+.post__body { margin-top: clamp(1.6rem, 3vw, 2.2rem); max-width: 68ch; }
+.post__body h3 { margin-top: 1.4rem; }
+
+/* Homepage teaser for the most recent post. */
+.latest {
+  display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 8fr) 2rem;
+  gap: clamp(1rem, 3vw, 2.6rem); align-items: start;
+  padding-block: clamp(1.6rem, 3vw, 2.4rem);
+  transition: padding-inline 0.5s var(--e-out);
+}
+.latest:hover { padding-inline: clamp(0.4rem, 1.2vw, 1.2rem); }
+.latest__meta { display: flex; flex-direction: column; gap: 0.6rem; }
+.latest__main { display: flex; flex-direction: column; gap: 0.7rem; min-width: 0; }
+.latest__title {
+  font-family: var(--f-display); font-weight: 600; font-size: var(--t-lg);
+  letter-spacing: -0.028em; line-height: 1.2; max-width: 34ch;
+}
+.latest__note { font-size: var(--t-sm); color: var(--ink-70); line-height: 1.6; max-width: 60ch; }
+.latest__arrow { justify-self: end; color: var(--ink-45); transition: transform 0.5s var(--e-out), color 0.4s; }
+.latest:hover .latest__arrow { transform: translate(4px, -4px); color: var(--pv); }
+@media (max-width: 760px) {
+  .latest { grid-template-columns: minmax(0, 1fr) 1.6rem; }
+  .latest__meta { grid-column: 1 / -1; flex-direction: row; gap: 1rem; align-items: baseline; }
+}
