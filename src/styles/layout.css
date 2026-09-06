@@ -151,9 +151,13 @@ main > .foot, .foot { position: relative; z-index: 1; background: var(--bg); }
    Photo plate on top, dark body below, bio behind a toggle. Every card
    is the same size whether or not a photograph has been supplied. */
 .tgrid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 300px));
-  gap: clamp(1.2rem, 2.4vw, 2rem); justify-content: center;
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1.2rem, 2.4vw, 2rem);
+  max-width: 1020px; margin-inline: auto;
 }
+.tgrid > * { min-width: 0; }
+@media (max-width: 860px) { .tgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .tgrid { grid-template-columns: minmax(0, 1fr); max-width: 320px; } }
 .tcard {
   display: flex; flex-direction: column; overflow: hidden;
   border: 1px solid var(--rule); border-radius: 14px;
@@ -221,13 +225,13 @@ main > .foot, .foot { position: relative; z-index: 1; background: var(--bg); }
   position: relative; display: grid;
   grid-template-columns: clamp(4rem, 8vw, 7rem) minmax(0, 1fr);
   column-gap: clamp(2.6rem, 4.8vw, 4rem);
-  padding-block: clamp(1rem, 2vw, 1.6rem);
+  padding-block: clamp(1.4rem, 2.8vw, 2.4rem);
 }
 .track__item + .track__item { border-top: 1px solid var(--rule); }
 .track__item::before {
   content: ''; position: absolute;
   left: calc(clamp(4rem, 8vw, 7rem) + clamp(1.1rem, 2.2vw, 1.8rem) - 4.5px);
-  top: calc(clamp(1rem, 2vw, 1.6rem) + 0.35em);
+  top: calc(clamp(1.4rem, 2.8vw, 2.4rem) + 0.35em);
   width: 10px; height: 10px; border-radius: 50%;
   background: var(--bg); border: 1px solid var(--ink-25);
   transition: background 0.5s var(--e-out), border-color 0.5s var(--e-out);
@@ -240,7 +244,10 @@ main > .foot, .foot { position: relative; z-index: 1; background: var(--bg); }
   transition: color 0.5s var(--e-out);
 }
 .track__item.is-reached .track__year { color: var(--fg); }
-.track__text { font-size: var(--t-sm); color: var(--ink-70); line-height: 1.65; max-width: 66ch; }
+.track__title { font-family: var(--f-display); font-weight: 600; font-size: var(--t-lg); letter-spacing: -0.028em; line-height: 1.15; }
+.track__list { display: flex; flex-direction: column; gap: 0.55rem; margin-top: 0.85rem; }
+.track__list li { position: relative; padding-left: 1.1rem; font-size: var(--t-sm); color: var(--ink-70); line-height: 1.6; }
+.track__list li::before { content: ''; position: absolute; left: 0; top: 0.62em; width: 5px; height: 5px; background: var(--pv); }
 @media (max-width: 640px) {
   .track__rail, .track__item::before { display: none; }
   .track__item { grid-template-columns: minmax(0, 1fr); row-gap: 0.7rem; }
@@ -333,3 +340,12 @@ main > .foot, .foot { position: relative; z-index: 1; background: var(--bg); }
   .pagehero__inner { grid-template-columns: minmax(0, 1fr); }
   .pageidx { display: none; }
 }
+
+/* ——— Mine-to-solar venture ——————————————————— */
+.venturegrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(1.2rem, 2.4vw, 2rem); }
+.venturegrid > * { min-width: 0; }
+@media (max-width: 860px) { .venturegrid { grid-template-columns: minmax(0, 1fr); } }
+.venture__head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.venture .card__title { font-size: var(--t-xl); margin-top: 0.3rem; }
+.venture .card__body { max-width: 56ch; }
+.venture .card__foot { display: flex; }

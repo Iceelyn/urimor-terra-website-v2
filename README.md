@@ -38,7 +38,7 @@ so it also works from a subdirectory.
 
 | File | Purpose |
 |---|---|
-| `index.html` | Home — hero, four services, mine land, why work with us, track record, team |
+| `index.html` | Home — hero, three services, mine-to-solar venture, mine land, why work with us, track record, team |
 | `services.html` | The four services in detail |
 | `approach.html` | Why closed mine land, restoration, Nalaikh, software |
 | `about.html` | About us, mission and vision, track record, team |
@@ -116,7 +116,8 @@ relationship to that project. Please keep that disclaimer attached if the copy i
 
 ## People
 
-Team cards live in the `FOUNDERS` and `ADVISORS` lists at the top of the people block.
+Team cards live in the `FOUNDERS` and `TEAM` lists at the top of the people block.
+Both use the same card, and they render as one grid, three per row.
 Each person takes six fields:
 
 ```
@@ -129,8 +130,9 @@ line      one short line under the role
 bio       the text behind the Read Bio toggle
 ```
 
-`ADVISORS` is empty. Add entries there and an "Advisory board" row appears below the
-founders automatically, in the same card style. Nothing else needs changing.
+**`TEAM` currently holds four placeholder cards** reading "To be announced". They are
+live on the site. Replace `name`, `role`, `line` and `bio` for each, or delete an entry
+to remove its card. The grid reflows on its own.
 
 Photographs are square (`aspect-ratio: 1/1`, `object-fit: cover`), so any reasonably
 centred headshot will crop correctly.
