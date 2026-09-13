@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="512" height="512" fill="none" role="img" aria-label="Urimor Terra Development LLC">
+  <title>Urimor Terra Development LLC</title>
+  <path d="M37 50a13 13 0 0 1 26 0Z" fill="#3d8bfd"/>
+  <path d="M26 50a24 24 0 0 1 48 0" stroke="#3d8bfd" stroke-opacity=".6" stroke-width="2.4"/>
+  <path d="M16 50a34 34 0 0 1 68 0" stroke="#3d8bfd" stroke-opacity=".3" stroke-width="2.4"/>
+  <path d="M89 50a39 39 0 0 1-78 0" stroke="#eef4fa" stroke-opacity=".55" stroke-width="2.4"/>
+  <path d="M78 50a28 28 0 0 1-56 0" stroke="#eef4fa" stroke-opacity=".38" stroke-width="2.4"/>
+  <path d="M67 50a17 17 0 0 1-34 0" stroke="#eef4fa" stroke-opacity=".24" stroke-width="2.4"/>
+  <path d="M3 50h94" stroke="#eef4fa" stroke-opacity=".5" stroke-width="2"/>
+</svg>
