@@ -12,6 +12,7 @@ import '@fontsource-variable/jetbrains-mono/wght.css';
 import '../styles/main.css';
 import { gsap, ScrollTrigger, reduced, splitLines, initReveals, initCounters, initParallax, initProgress, initTrack } from './modules/motion.js';
 import { initNav, initMenu, initCursor, initMagnetic, initAccordion, initBios, initYear } from './modules/ui.js';
+import { initShowcaseVideo } from './modules/video.js';
 
 document.documentElement.classList.remove('no-js');
 document.documentElement.classList.add('js');
@@ -215,6 +216,7 @@ function boot() {
   initMagnetic();
   initAccordion();
   initBios();
+  initShowcaseVideo();
   initLedger();
   initAnchors();
   initYear();

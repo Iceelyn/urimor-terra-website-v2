@@ -42,6 +42,7 @@ so it also works from a subdirectory.
 | `services.html` | The four services in detail |
 | `approach.html` | Why closed mine land, restoration, Nalaikh, software |
 | `news.html` | Conference notes and updates, newest first |
+| `mine-to-value-demo.html` | The Mine-to-Value prototype, framed under a slim bar |
 | `about.html` | About us, mission and vision, track record, team |
 
 ## Structure
@@ -161,3 +162,37 @@ Posts live in the `POSTS` list in the news generator, newest first. Each takes a
 `anchor`, `date`, `kind`, `title`, `author`, `role`, `standfirst`, and a `body` of
 `(subheading, [paragraphs])` pairs. The homepage teaser under `#latest` is written by
 hand in the home page markup, so update it when a newer post should lead.
+
+## The Mine-to-Value demo
+
+The prototype is a **separate application** in its own repository. This site does not
+contain it. `mine-to-value-demo.html` frames it under a slim Urimor bar so it can be
+reached at your own address instead of the github.io one.
+
+The demo address appears in one place, `DEMO_URL` at the top of the demo page generator.
+Change it there if the prototype moves.
+
+### Reaching it at urimor.mn/mine-to-value-demo
+
+`netlify.toml` rewrites `/mine-to-value-demo` to `/mine-to-value-demo.html`, so the clean
+path works once the site is on Netlify. The `.html` address keeps working everywhere,
+including GitHub Pages, which is why the **Try our demo** button links to it.
+
+If you would rather serve the prototype itself under your domain rather than framing it,
+`netlify.toml` carries a commented proxy rewrite that fetches the demo and serves it as
+`urimor.mn/mine-to-value-demo`. That is the sturdier option, because a framed page depends
+on the demo's host permitting frames. If you switch to it, point the **Try our demo**
+button at `/mine-to-value-demo` instead of `mine-to-value-demo.html`.
+
+### The showcase video
+
+`public/media/mine-to-value.mp4` — H.264, 1280×720, 5 seconds, 3.75 MB. It autoplays
+muted and loops behind the opening section, pauses when scrolled out of view, and carries
+a pause control, which autoplaying motion needs. It is not loaded at all when the visitor
+has asked for reduced motion or is on a metered connection; a painted gradient stands in.
+
+There is no poster image. To add one, extract a frame and reference it from the `<video>`:
+
+```bash
+ffmpeg -i public/media/mine-to-value.mp4 -ss 1.7 -frames:v 1 -q:v 3 public/media/mine-to-value-poster.jpg
+```

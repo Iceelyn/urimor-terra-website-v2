@@ -15,6 +15,7 @@ export default defineConfig({
         services: resolve(import.meta.dirname, 'services.html'),
         approach: resolve(import.meta.dirname, 'approach.html'),
         news: resolve(import.meta.dirname, 'news.html'),
+        demo: resolve(import.meta.dirname, 'mine-to-value-demo.html'),
         about: resolve(import.meta.dirname, 'about.html'),
       },
     },
